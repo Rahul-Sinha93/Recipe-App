@@ -1,7 +1,8 @@
 import Search from './models/search';
 import recipe from './models/Recipe';
 import { elements, renderLoader, clearLoader} from './views/base';   
-import * as searchView  from "./views/searchview"; 
+import * as searchView  from "./views/searchView"; 
+import * as recipeView  from "./views/recipeView"; 
 
 
 const state = {};
@@ -42,10 +43,44 @@ elements.searchResPages.addEventListener('click', e =>{
 
 //Recipe Controller
 
-const r = new recipe(47746);
-r.getRecipe();
-console.log(r)
+const controlRecipe  = async () =>{
+    const id = window.location.hash.replace('#', '');
+    if(id){
+        //Prepare Ui for Changes
+        recipeView.clearRecipe();
+        renderLoader(elements.recipe)
 
 
+        //create New Recipe object
+        state.recipe = new recipe(id)
 
+        // //testing
+        // window.r = state.recipe;
+
+        try{
+
+            //Get recipe data and parse ingredients
+            await state.recipe.getRecipe();
+            state.recipe.parseIngredients();
+    
+            //calculate servings and time
+            state.recipe.calcTime();
+            state.recipe.calcServings();
+     
+            //Render Recipe
+           clearLoader();
+           recipeView.renderRecipe(state.recipe)
+            // console.log(state.recipe)
+
+        }catch(err){
+                alert('Error Processing Recipe')
+        }
+    }
+}
+
+// window.addEventListener('hashchange', controlRecipe);
+// window.addEventListener('load', controlRecipe);
+ 
+
+['hashchange','load'].forEach(event => window.addEventListener(event,controlRecipe))
 
