@@ -13,7 +13,7 @@ export default class Recipe {
             this.img  = res.data.recipe.image_url;
             this.url = res.data.recipe.source_url;
             this.ingredients = res.data.recipe.ingredients;
-            // console.log(res)
+             console.log(res)
 
         }catch(error){
                 console.log(error) }
