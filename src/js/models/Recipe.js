@@ -20,7 +20,7 @@ export default class Recipe {
     }
      
     calcTime(){
-        //assuming that each 3 recipe takes 15 minutes
+        //assuming that each 3 ingredient takes 15 minutes
         const numIng = this.ingredients.length;
         const periods = numIng /3;
         this.time = periods *15
@@ -86,6 +86,18 @@ export default class Recipe {
             return objIng;
         }) 
         this.ingredients = newIngredients;
+    }
+
+    updateServings (type) {
+        //servings
+        const newServings = type === 'dec' ? this.servings - 1 : this.servings + 1;
+
+        //ingredients
+        this.ingredients.forEach(ing => {
+            ing.count *= (newServings / this.servings) 
+        });
+
+        this.servings = newServings;
     }
 }
 
